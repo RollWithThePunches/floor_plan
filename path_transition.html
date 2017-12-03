@@ -1,411 +1,245 @@
 <!DOCTYPE html>
 
 <head>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800i" rel="stylesheet">
+  	<script src="https://d3js.org/d3.v4.min.js"></script>
+  	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800i" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
   
   <style>
-  @charset "utf-8";
+  	@charset "utf-8";
 
-html, body{
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-body{
-	margin: 0 auto;
-	padding: 0;
-	width: 560px;
-	text-align: center;
-	background: #fff;
-	font-family: 'PT Serif', serif;
-	color: #000;
-	background: transparent;
-}
-
-#floorPlan {
-	margin:0 0 100px -150px; 
-}
-
-#floorPlanMob {
-	display: none;
-	visibility: hidden;
-}
-
-#floorPlanMobile {
-	margin:0 0 100px -150px; 
-	display: none;
-	visibility: hidden;
-}
-
-.flrRect {
-	fill: #fff;
-	stroke: #0060a9;
-	stroke-width: 1.5px;
-}
-
-.flrBlurb {
-	fill: #0060a9;
-	font-family: 'Roboto Condensed', sans-serif;
-	font-size: 1.3em;
-	text-anchor: end;
-}
-
-.flrPar {
-	color: #0060a9;
-	font-family: 'Roboto Condensed', sans-serif;
-	font-size: 1.3em;
-	line-height: 1.3em;
-	text-align: right;
-}
-
-.floorPlanMobile {
-	display: none;
-	visibility: hidden;
-}
-
-/* ------------------------------------ */
-/* -------------- Mobile ---------------*/
-@media only screen and (max-width: 460px){
-
-#floorPlan{
-		margin:0 0 100px -150px; 
-		display: none;
-		visibility: hidden;
-		}
-
-		#fplan-container-mob{
-		margin: 0 auto;
+	html, body{
 		width: 100%;
-		display: block;
-		visibility: visible;
-		}
-
-		#floorPlanMob{
-		margin: 0 auto;
-		width: 320px;
-		height: 450px;
-		text-align: center;
-		display: block;
-		visibility: visible;
-		position: relative;
-		}
-
-		.floorPlanMobile{
-		width: 100%;
-		height: 400px;
-		display: block;
-		visibility: visible;
-		}
-
-		.floorPlanMobile img{
 		margin: 0;
-		min-width: 320px;
-		min-height: 178px;
-		max-width: 420px;
-		max-height: 278px;
-		}
-		footer p{
-		margin: 0 10px;
-		}
+		padding: 0;
+	}
 
-		.flrPar{
-		text-align: left;
+	body{
+		margin: 0 auto;
+		padding: 0;
+		width: 560px;
+		text-align: center;
+		background: #fff;
+		font-family: 'PT Serif', serif;
+		color: #000;
+		background: transparent;
+	}
+
+	#floorPlan {
+		margin:0 0 100px -150px; 
+	}
+
+	.flrRect {
+		fill: #fff;
+		stroke: #0060a9;
+		stroke-width: 1.5px;
+	}
+
+	.flrBlurb {
+		fill: #0060a9;
+		font-family: 'Roboto Condensed', sans-serif;
+		font-size: 1.3em;
+		text-anchor: end;
+	}
+
+	.flrPar {
+		color: #0060a9;
+		font-family: 'Roboto Condensed', sans-serif;
 		font-size: 1.3em;
 		line-height: 1.3em;
-		color: #000;
-		}
-
-		.d3-tipMob {
-		padding: 15px 15px 5px 15px;
-		background: #fff;
-		color: #fff;
-		border-radius: 2px;
-		border: 1px solid #0060a9;
-		box-shadow: 3px 3px 2px #999;
-		-webkit-box-shadow: 3px 3px 2px #999;
-		-moz-box-shadow: 3px 3px 2px #999;
-		font-size: 1em;
-		line-height: 1.2em;
-		font-family: 'Roboto Condensed', sans-serif;
-		fill: #0060a9;
-		color: #0060a9;
-		text-align: left;
-		}
-
-		.d3-tipMob.n:after {
-		margin: -2px 0 0 0;
-		top: 100%;
-		left: 0;
-		transition: width 2s;
-		transition-timing-function: linear;
-		-webkit-transition: width 2s;
-		-webkit-transition-timing-function: linear;
-		}
-
-}
+		text-align: right;
+	}
 
 </style>
 </head>
 
 <body>
-<div id="container-flr">
-      <div id="floorPlan"></div>
-      <div id="fplan-container-mob">
-          <div id="floorPlanMob"></div>
-      </div>
+	<div id="container-flr">
+	      <div id="floorPlan"></div>
+	</div>
       
 <script>
 ///////////////////////////////
 // FLOOR PLAN path animation //
 ///////////////////////////////
 
-var fplanWidth = 850,
-    fplanHeight = 805;
+	var fplanWidth = 850,
+	    fplanHeight = 805;
 
 
-var fplan  = d3.select('#floorPlan')
-.append('svg')
-.attr('height',fplanHeight)
-.attr('width',fplanWidth);
+	var fplan  = d3.select('#floorPlan')
+	.append('svg')
+	.attr('height',fplanHeight)
+	.attr('width',fplanWidth);
 
-var fplanGroup = fplan.append('g')
-.attr('height',fplanHeight)
-.attr('width',fplanWidth);
+	var fplanGroup = fplan.append('g')
+	.attr('height',fplanHeight)
+	.attr('width',fplanWidth);
 
-fplanGroup.append('svg:image')
-.attr('transform','translate(0,0)')
-.attr('xlink:href','https://s3.amazonaws.com/cesarescostcos/img/costco-floor-plan-clipped.svg')
-.attr('width',850)
-.attr('height',805);
-
-
-var pathStart = [ 
-        { "x": 535, "y": 770},
-        { "x": 290, "y": 680},  
-        { "x": 647, "y": 310},
-        { "x": 510, "y": 250}, 
-        { "x": 572, "y": 170},
-        { "x": 630, "y": 210},  
-        { "x": 570, "y": 273},
-        { "x": 646, "y": 308},
-        { "x": 612, "y": 346},  
-        { "x": 505, "y": 300},
-        { "x": 480, "y": 330},  
-        { "x": 585, "y": 375},
-        { "x": 550, "y": 410},
-        { "x": 440, "y": 363},
-        { "x": 325, "y": 480},
-        { "x": 175, "y": 408}
-    ];
-
-var pathEnd  = [
-        { "x": 175, "y": 408},
-        { "x": 35,  "y": 555},
-        { "x": 250, "y": 650},
-        { "x": 180, "y": 720},
-        { "x": 30,  "y": 740}
-    ];
-
-var fplanImages = [
-{'x':63,'y':395,'width':240,'height':214,'image':'bottom_left_shelves.svg'},
-{'x':540,'y':179,'width':70,'height':85,'image':'cheese_can.svg'},
-{'x':595,'y':196,'width':104,'height':104,'image':'cheese.svg'},
-{'x':503,'y':298,'width':91,'height':72,'image':'wine_rack.svg'},
-{'x':470,'y':335,'width':92,'height':66,'image':'mid_shelves.svg'},
-{'x':447,'y':366,'width':86,'height':64,'image':'dvd_racks.svg'},
-{'x':200,'y':664,'width':59,'height':64,'image':'cashier.svg'},
-{'x':10,'y':529,'width':102,'height':163,'image':'front-left-pharma.svg'},
-{'x':-10,'y':610,'width':102,'height':163,'image':'cafe.svg'}
-];
-
-circleArray = [
-{'x':560,'y':160,'textValue':'<p>Freshly baked loaves<br>of bread. Mini baguettes<br>in the past.</p>'},
-{'x':510,'y':407,'textValue':'<p>Picking out books and<br>DVDs for the library</p>'},
-{'x':560,'y':340,'textValue':'<p>Searching among wine<br>racks in certain states.<br>Exploring the French and<br>Italian brands.</p>'},
-{'x':300,'y':430,'textValue':'<p>Bags of coffee—only<br>purchasing beans,<br>not grounded.<br>A favorite is the<br>Mayorga Cubano brand.</p>'},
-{'x':95,'y':610,'textValue':'<p>Stocking up on paper<br>towels and toilet tissue.<br>Almost always Kirkland<br>and Scott.</p>'},
-{'x':95,'y':730,'textValue':'<p>Lastly, ordering from<br>the cafeteria, often<br>prepaying at checkout.</p>'}
-];
-/*var triangle = [
-{'x':900, 'y':300},
-{'x':900, 'y':800},
-{'x':400, 'y':800}
-];*/
-var pathLineStart = d3.line()
-.y(function(d) {return d.y;})
-.x(function(d) {return d.x;})
-
-var pathLineEnd = d3.line()
-.y(function(d) {return d.y;})
-.x(function(d) {return d.x;})
-
-var pathStartGroup = fplanGroup.append('g');
-
-var shoppingPathStart = pathStartGroup.append("path")
-.attr('d',pathLineStart(pathStart))
-.attr('class','shoppingPath')
-.attr("stroke", "#e31936")
-.attr("stroke-width", "10")
-.attr('opacity',0)
-.attr("fill", "none");
-
-var pathEndGroup = fplanGroup.append('g');
-
-var shoppingPathEnd = pathEndGroup.append("path")
-.attr('d',pathLineEnd(pathEnd))
-.attr('class','shoppingPath')
-.attr("stroke", "#e31936")
-.attr("stroke-width", "10")
-.attr('opacity',0)
-.attr("fill", "none");
-
-var shoppingLengthStart = shoppingPathStart.node().getTotalLength();
-
-var shoppingLengthEnd = shoppingPathEnd.node().getTotalLength();
+	fplanGroup.append('svg:image')
+	.attr('transform','translate(0,0)')
+	.attr('xlink:href','https://s3.amazonaws.com/cesarescostcos/img/costco-floor-plan-clipped.svg')
+	.attr('width',850)
+	.attr('height',805);
 
 
+	var pathStart = [ 
+		{ "x": 535, "y": 770},
+		{ "x": 290, "y": 680},  
+		{ "x": 647, "y": 310},
+		{ "x": 510, "y": 250}, 
+		{ "x": 572, "y": 170},
+		{ "x": 630, "y": 210},  
+		{ "x": 570, "y": 273},
+		{ "x": 646, "y": 308},
+		{ "x": 612, "y": 346},  
+		{ "x": 505, "y": 300},
+		{ "x": 480, "y": 330},  
+		{ "x": 585, "y": 375},
+		{ "x": 550, "y": 410},
+		{ "x": 440, "y": 363},
+		{ "x": 325, "y": 480},
+		{ "x": 175, "y": 408}
+	    ];
 
-                shoppingPathStart
-                .attr("stroke-dasharray", (shoppingLengthStart) + " " + (shoppingLengthStart))
-                .attr("stroke-dashoffset", shoppingLengthStart)
-                .transition()
-                .duration(100)
-                .attr('opacity',1)
-                .transition()
-                .duration(8000)
-                //.ease("linear")
-                .attr("stroke-dashoffset", 10)
-                .attr('transform','translate(0,0)')
-                .transition()
-                .duration(1200)
-                .delay(600);
+	var pathEnd  = [
+		{ "x": 175, "y": 408},
+		{ "x": 35,  "y": 555},
+		{ "x": 250, "y": 650},
+		{ "x": 180, "y": 720},
+		{ "x": 30,  "y": 740}
+	    ];
+
+	var fplanImages = [
+	{'x':63,'y':395,'width':240,'height':214,'image':'bottom_left_shelves.svg'},
+	{'x':540,'y':179,'width':70,'height':85,'image':'cheese_can.svg'},
+	{'x':595,'y':196,'width':104,'height':104,'image':'cheese.svg'},
+	{'x':503,'y':298,'width':91,'height':72,'image':'wine_rack.svg'},
+	{'x':470,'y':335,'width':92,'height':66,'image':'mid_shelves.svg'},
+	{'x':447,'y':366,'width':86,'height':64,'image':'dvd_racks.svg'},
+	{'x':200,'y':664,'width':59,'height':64,'image':'cashier.svg'},
+	{'x':10,'y':529,'width':102,'height':163,'image':'front-left-pharma.svg'},
+	{'x':-10,'y':610,'width':102,'height':163,'image':'cafe.svg'}
+	];
+
+	circleArray = [
+	{'x':560,'y':160,'textValue':'<p>Freshly baked loaves<br>of bread. Mini baguettes<br>in the past.</p>'},
+	{'x':510,'y':407,'textValue':'<p>Picking out books and<br>DVDs for the library</p>'},
+	{'x':560,'y':340,'textValue':'<p>Searching among wine<br>racks in certain states.<br>Exploring the French and<br>Italian brands.</p>'},
+	{'x':300,'y':430,'textValue':'<p>Bags of coffee—only<br>purchasing beans,<br>not grounded.<br>A favorite is the<br>Mayorga Cubano brand.</p>'},
+	{'x':95,'y':610,'textValue':'<p>Stocking up on paper<br>towels and toilet tissue.<br>Almost always Kirkland<br>and Scott.</p>'},
+	{'x':95,'y':730,'textValue':'<p>Lastly, ordering from<br>the cafeteria, often<br>prepaying at checkout.</p>'}
+	];
+	/*var triangle = [
+	{'x':900, 'y':300},
+	{'x':900, 'y':800},
+	{'x':400, 'y':800}
+	];*/
+	var pathLineStart = d3.line()
+	.y(function(d) {return d.y;})
+	.x(function(d) {return d.x;})
+
+	var pathLineEnd = d3.line()
+	.y(function(d) {return d.y;})
+	.x(function(d) {return d.x;})
+
+	var pathStartGroup = fplanGroup.append('g');
+
+	var shoppingPathStart = pathStartGroup.append("path")
+	.attr('d',pathLineStart(pathStart))
+	.attr('class','shoppingPath')
+	.attr("stroke", "#e31936")
+	.attr("stroke-width", "10")
+	.attr('opacity',0)
+	.attr("fill", "none");
+
+	var pathEndGroup = fplanGroup.append('g');
+
+	var shoppingPathEnd = pathEndGroup.append("path")
+	.attr('d',pathLineEnd(pathEnd))
+	.attr('class','shoppingPath')
+	.attr("stroke", "#e31936")
+	.attr("stroke-width", "10")
+	.attr('opacity',0)
+	.attr("fill", "none");
+
+	var shoppingLengthStart = shoppingPathStart.node().getTotalLength();
+
+	var shoppingLengthEnd = shoppingPathEnd.node().getTotalLength();
 
 
-                shoppingPathEnd
-                .attr("stroke-dasharray", (shoppingLengthEnd) + " " + (shoppingLengthEnd))
-                .attr("stroke-dashoffset", shoppingLengthEnd)
-                .transition()
-                .duration(100)
-                .attr('opacity',1)
-                .transition()
-                .duration(8000)
-                .delay(5000)
-                //.ease("linear")
-                .attr("stroke-dashoffset", 10)
-                .attr('transform','translate(0,0)')
-                .transition()
-                .duration(1200)
-                .delay(600);
 
-// Floor plan images
-fplanGroup.selectAll('.flrplanImages')
-.data(fplanImages)
-.enter().append('svg:image')
-.attr('x',function(d) { return d.x; })
-.attr('y',function(d) { return d.y; })
-.attr('width', function(d) { return d.width})
-.attr('height',function(d) { return d.height; })
-.attr('class','flrplanImages')
-.attr('xlink:href',function(d){ return 'https://s3.amazonaws.com/cesarescostcos/img/' + d.image;});
-
-fplanGroup.append("foreignObject")
-.attr('width',300)
-.attr('height',300)
-.attr('class','flrPar')
-.attr('transform','translate(550,760)')
-.append('xhtml:products')
-.html("<p>Follow Cesare's path throughout Costco. Hover over markers for more.</p>") 
-
-var tool_tip = d3.tip()
-.attr("class", "d3-tip")
-.offset([-8, 0])
-.html(function(d) { return d.textValue; });
-fplanGroup.call(tool_tip);
-
-fplanGroup.selectAll('circle')
-.data(circleArray)
-.enter().append('circle')
-.attr('id', function(d){
-    return d.textValue.replace(' ','-')
-})
-.attr('r',10)
-.attr('cx',function(d) { return d.x; })
-.attr('cy',function(d) { return d.y; })
-.attr('fill','#0060a9')
-.attr('stroke','#4e97c4')
-.attr('stroke-width',4)
-.on("mouseover", tool_tip.show)
-.on("mouseout", tool_tip.hide);
+			shoppingPathStart
+			.attr("stroke-dasharray", (shoppingLengthStart) + " " + (shoppingLengthStart))
+			.attr("stroke-dashoffset", shoppingLengthStart)
+			.transition()
+			.duration(100)
+			.attr('opacity',1)
+			.transition()
+			.duration(8000)
+			//.ease("linear")
+			.attr("stroke-dashoffset", 10)
+			.attr('transform','translate(0,0)')
+			.transition()
+			.duration(1200)
+			.delay(600);
 
 
-//////////////////////////////////////
-// FLOOR PLAN path animation Mobile //
-//////////////////////////////////////
+			shoppingPathEnd
+			.attr("stroke-dasharray", (shoppingLengthEnd) + " " + (shoppingLengthEnd))
+			.attr("stroke-dashoffset", shoppingLengthEnd)
+			.transition()
+			.duration(100)
+			.attr('opacity',1)
+			.transition()
+			.duration(8000)
+			.delay(5000)
+			//.ease("linear")
+			.attr("stroke-dashoffset", 10)
+			.attr('transform','translate(0,0)')
+			.transition()
+			.duration(1200)
+			.delay(600);
 
-var fplanWidthMob = '100%',
-    fplanHeightMob = 500;
+	// Floor plan images
+	fplanGroup.selectAll('.flrplanImages')
+	.data(fplanImages)
+	.enter().append('svg:image')
+	.attr('x',function(d) { return d.x; })
+	.attr('y',function(d) { return d.y; })
+	.attr('width', function(d) { return d.width})
+	.attr('height',function(d) { return d.height; })
+	.attr('class','flrplanImages')
+	.attr('xlink:href',function(d){ return 'https://s3.amazonaws.com/cesarescostcos/img/' + d.image;});
 
-circleArrayMob = [
-{'x':210,'y':65,'textValue':'<p>Freshly baked loaves of bread. Mini baguettes in the past.</p>'},
-{'x':190,'y':160,'textValue':'<p>Picking out books and DVDs for the library</p>'},
-{'x':220,'y':135,'textValue':'<p>Searching among wine racks in certain states. Exploring the French and Italian brands.</p>'},
-{'x':110,'y':170,'textValue':'<p>Bags of coffee—only<br>purchasing beans,<br>not grounded.<br>A favorite is the<br>Mayorga Cubano brand.</p>'},
-{'x':30,'y':240,'textValue':'<p>Stocking up on paper<br>towels and toilet tissue.<br>Almost always Kirkland<br>and Scott.</p>'},
-{'x':30,'y':290,'textValue':'<p>Lastly, ordering from<br>the cafeteria, often<br>prepaying at checkout.</p>'}
-];
+	fplanGroup.append("foreignObject")
+	.attr('width',300)
+	.attr('height',300)
+	.attr('class','flrPar')
+	.attr('transform','translate(550,760)')
+	.append('xhtml:products')
+	.html("<p>Follow Cesare's path throughout Costco. Hover over markers for more.</p>") 
 
-var fplanMob  = d3.select('#floorPlanMob')
-.append('svg')
-.attr('height',fplanHeightMob)
-.attr('width',fplanWidthMob);
+	var tool_tip = d3.tip()
+	.attr("class", "d3-tip")
+	.offset([-8, 0])
+	.html(function(d) { return d.textValue; });
+	fplanGroup.call(tool_tip);
 
-var fplanGroupMob = fplanMob.append('g')
-.attr('height',fplanHeightMob)
-.attr('width',fplanWidthMob);
-
-fplanGroupMob.append('svg:image')
-.attr('align','center')
-.attr('xlink:href','https://s3.amazonaws.com/cesarescostcos/img/costco-floor-plan-full.svg')
-.attr('width',322.17)
-.attr('height',330);
-
-fplanGroupMob.append("foreignObject")
-.attr('class','blurb')
-.attr('width',320)
-.attr('height',300)
-.attr('class','flrPar')
-.attr('transform','translate(0,350)')
-.append('xhtml:products')
-.html("<p>Follow Cesare's path throughout Costco. Tap markers for more.</p>") 
-
-var tool_tipMob = d3.tip()
-.attr("class", "d3-tipMob")
-.offset([-8, 0])
-.html(function(d) { return d.textValue; });
-fplanGroupMob.call(tool_tipMob);
-
-fplanGroupMob.selectAll('circle')
-.data(circleArrayMob)
-.enter().append('circle')
-.attr('id', function(d){
-    return d.textValue.replace(' ','-')
-})
-.attr('r',7)
-.attr('cx',function(d) { return d.x; })
-.attr('cy',function(d) { return d.y; })
-.attr('fill','#0060a9')
-.attr('stroke','#4e97c4')
-.attr('stroke-width',3)
-.on("mouseover", function(d){
-  tool_tipMob.show(d)  
-  .style("top", (d3.event.pageY - 50) + "px")
-  .style("left", (d3.event.pageX + 16) + "px");
-})
-.on("mouseout", tool_tipMob.hide);
-
+	fplanGroup.selectAll('circle')
+	.data(circleArray)
+	.enter().append('circle')
+	.attr('id', function(d){
+	    return d.textValue.replace(' ','-')
+	})
+	.attr('r',10)
+	.attr('cx',function(d) { return d.x; })
+	.attr('cy',function(d) { return d.y; })
+	.attr('fill','#0060a9')
+	.attr('stroke','#4e97c4')
+	.attr('stroke-width',4)
+	.on("mouseover", tool_tip.show)
+	.on("mouseout", tool_tip.hide);
 
 </script>
 
